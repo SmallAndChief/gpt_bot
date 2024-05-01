@@ -68,8 +68,8 @@ def select_n_last_messages(user_id, n_last_messages=4):
         with sqlite3.connect(path_to_db) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-            SELECT message, role, total_gpt_tokens FROM messages WHERE user_id=? AND role!=test ORDER BY id DESC LIMIT ?
-            ''', (user_id, n_last_messages))
+            SELECT message, role, total_gpt_tokens FROM messages WHERE user_id=? AND role!=? ORDER BY id DESC LIMIT ?
+            ''', (user_id, "test", n_last_messages))
             data = cursor.fetchall()
             if data and data[0]:
                 for message in reversed(data):
