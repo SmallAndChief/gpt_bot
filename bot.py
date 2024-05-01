@@ -86,7 +86,7 @@ def stt(message):
         if not message.voice:
             bot.send_message(user_id, 'Неверный тип данный. Повторите попытку, введя /stt снова')
             return
-        stt_blocks, error_message = is_stt_block_limit(user_id, message.voice.duration)
+        stt_blocks, error_message = is_stt_block_limit(message, message.voice.duration)
         if error_message:
             bot.send_message(user_id, error_message)
             return
@@ -140,7 +140,7 @@ def handle_voice(message: telebot.types.Message):
         if not status_check_users:
             bot.send_message(user_id, error_message)
             return
-        stt_blocks, error_message = is_stt_block_limit(user_id, message.voice.duration)
+        stt_blocks, error_message = is_stt_block_limit(message, message.voice.duration)
         if error_message:
             bot.send_message(user_id, error_message)
             return
