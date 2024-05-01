@@ -58,7 +58,7 @@ def tts(message):
     user_id = message.from_user.id
     try:
         text = message.text
-        tts_symbols, error_message = is_tts_symbol_limit(user_id, text)
+        tts_symbols, error_message = is_tts_symbol_limit(message=message, text=text)
         if error_message:
             bot.send_message(user_id, error_message)
             return
@@ -162,7 +162,7 @@ def handle_voice(message: telebot.types.Message):
             bot.send_message(user_id, answer_gpt)
             return
         total_gpt_tokens += tokens_in_answer
-        tts_symbols, error_message = is_tts_symbol_limit(user_id, answer_gpt)
+        tts_symbols, error_message = is_tts_symbol_limit(message=message, text=answer_gpt)
         add_message(user_id=user_id, full_message=[answer_gpt, 'assistant', total_gpt_tokens, tts_symbols, 0])
         if error_message:
             bot.send_message(user_id, error_message)
