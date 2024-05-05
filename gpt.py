@@ -12,17 +12,15 @@ logging.basicConfig(
 )
 
 
-iam_token, FOLDER_ID = get_creds()
-
-
-def count_gpt_tokens(messages, iam_token=iam_token):
+def count_gpt_tokens(messages):
+    iam_token, folder_id = get_creds()
     url = "https://llm.api.cloud.yandex.net/foundationModels/v1/tokenizeCompletion"
     headers = {
         'Authorization': f'Bearer {iam_token}',
         'Content-Type': 'application/json'
     }
     data = {
-        'modelUri': f"gpt://{FOLDER_ID}/yandexgpt-lite",
+        'modelUri': f"gpt://{folder_id}/yandexgpt-lite",
         "messages": messages
     }
     try:
@@ -32,14 +30,15 @@ def count_gpt_tokens(messages, iam_token=iam_token):
         return 0
 
 
-def ask_gpt(messages, iam_token=iam_token):
+def ask_gpt(messages):
+    iam_token, folder_id = get_creds()
     url = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
     headers = {
         'Authorization': f'Bearer {iam_token}',
         'Content-Type': 'application/json'
     }
     data = {
-        'modelUri': f"gpt://{FOLDER_ID}/yandexgpt-lite",
+        'modelUri': f"gpt://{folder_id}/yandexgpt-lite",
         "completionOptions": {
             "stream": False,
             "temperature": 0.7,
@@ -52,7 +51,7 @@ def ask_gpt(messages, iam_token=iam_token):
         if response.status_code != 200:
             return False, f"Ошибка GPT. Статус-код: {response.status_code}", None
         answer = response.json()['result']['alternatives'][0]['message']['text']
-        tokens_in_answer = count_gpt_tokens([{'role': 'assistant', 'text': answer}], iam_token)
+        tokens_in_answer = count_gpt_tokens([{'role': 'assistant', 'text': answer}])
         return True, answer, tokens_in_answer
     except Exception as e:
         logging.error(e)

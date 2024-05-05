@@ -2,10 +2,8 @@ import requests
 from creds import get_creds
 
 
-iam_token, FOLDER_ID = get_creds()
-
-
-def text_to_speech(text, iam_token=iam_token, folder_id=FOLDER_ID):
+def text_to_speech(text):
+    iam_token, folder_id = get_creds()
     headers = {
         'Authorization': f'Bearer {iam_token}',
     }
@@ -26,7 +24,8 @@ def text_to_speech(text, iam_token=iam_token, folder_id=FOLDER_ID):
         return False, "При запросе в SpeechKit возникла ошибка"
 
 
-def speech_to_text(data, iam_token=iam_token, folder_id=FOLDER_ID):
+def speech_to_text(data):
+    iam_token, folder_id = get_creds()
     params = "&".join([
         "topic=general",
         f"folderId={folder_id}",
